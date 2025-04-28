@@ -2,29 +2,42 @@
 
 import { usePathname } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
+import { MobileNav } from "@/components/mobile-nav"
 
 interface LayoutClientProps {
   children: React.ReactNode
 }
 
-export default function ClientLayout({ children }: LayoutClientProps) {
+export function ClientLayout({ children }: LayoutClientProps) {
   const pathname = usePathname()
-  const isAuthPage = pathname?.startsWith("/auth")
+  const isAuthPage = pathname === "/auth/login" || pathname === "/auth/register"
   const isHomePage = pathname === "/"
 
-  // Don't show sidebar on auth pages or home page
-  const showSidebar = !isAuthPage && !isHomePage
+  if (isAuthPage || isHomePage) {
+    return <>{children}</>
+  }
 
   return (
-    <div className="flex h-screen">
-      {showSidebar && (
-        <div className="hidden md:flex w-72 flex-col fixed inset-y-0">
+    <div className="relative min-h-screen">
+      {/* Mobile Navigation */}
+      <div className="sticky top-0 z-50 flex items-center justify-between p-4 border-b bg-background md:hidden">
+        <h1 className="text-xl font-bold">Paluwagan</h1>
+        <MobileNav />
+      </div>
+
+      <div className="flex h-[calc(100vh-4rem)] md:h-screen">
+        {/* Desktop Sidebar - hidden on mobile */}
+        <div className="hidden md:flex md:w-72 md:flex-col md:fixed md:inset-y-0">
           <AppSidebar />
         </div>
-      )}
-      <main className={`flex-1 overflow-y-auto bg-background ${showSidebar ? 'md:pl-72' : ''}`}>
-        {children}
-      </main>
+
+        {/* Main Content */}
+        <main className="flex-1 md:pl-72">
+          <div className="h-full p-8">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   )
 } 
