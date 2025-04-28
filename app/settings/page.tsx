@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -26,10 +26,18 @@ export default function SettingsPage() {
   
   const [preferences, setPreferences] = useState({
     emailNotifications: true,
-    darkMode: document.documentElement.classList.contains("dark"),
+    darkMode: false,
   })
   
   const [isLoading, setIsLoading] = useState(false)
+
+  // Initialize dark mode preference from document after mount
+  useEffect(() => {
+    setPreferences(prev => ({
+      ...prev,
+      darkMode: document.documentElement.classList.contains("dark"),
+    }))
+  }, [])
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault()
