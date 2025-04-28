@@ -1,11 +1,12 @@
+import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import ClientLayout from "@/components/layout-client"
-import Providers from "@/components/providers"
+import { Providers } from "@/components/providers"
+import { ClientLayout } from "@/components/layout-client"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Paluwagan Management System",
   description: "A digital platform for managing informal savings groups",
   icons: {
